@@ -38,16 +38,30 @@ function onYouTubeIframeAPIReady() {
         var parser = new DOMParser()
         var meiDoc = parser.parseFromString(xhr.responseText,"text/xml")
 
-        var recording = meiDoc.querySelector('performance > recording')
+        var recordings = meiDoc.querySelectorAll('performance > recording')
+        var recording = recordings[0]
+        var recording2 = recordings[1]
         var avFile = recording.querySelector('avFile[targettype="youtube"]').getAttribute('target')
+        var avFile2 = recording2.querySelector('avFile[targettype="youtube"]').getAttribute('target')
         var ytId = avFile.split('?v=')[1]
+        var ytId2 = avFile2.split('?v=')[1]
         var clipEls = recording.querySelectorAll('clip')
+        var clipEls2 = recording2.querySelectorAll('clip')
         var clips = []
         for (i = 0; i < clipEls.length; i++) {
           clips.push({
             begin: calcSeconds(clipEls[i].getAttribute('begin')),
             end: calcSeconds(clipEls[i].getAttribute('end')),
-            startid: clipEls[i].getAttribute('startid')
+            startid: clipEls[i].getAttribute('startid'),
+            ytId: avFile
+          })
+        }
+        for (i = 0; i < clipEls2.length; i++) {
+          clips.push({
+            begin: calcSeconds(clipEls[i].getAttribute('begin')),
+            end: calcSeconds(clipEls[i].getAttribute('end')),
+            startid: clipEls[i].getAttribute('startid'),
+            ytId: avFile2
           })
         }
 
@@ -61,10 +75,21 @@ function onYouTubeIframeAPIReady() {
             'onStateChange': function(e) {onPlayerStateChange(e, clips)}
           }
         });
+
+        player2 = new YT.Player('player2', {
+          height: '390',
+          width: '640',
+          videoId: ytId2,
+          events: {
+            'onReady': function(e) {onPlayerReady(e, clips)},
+            'onStateChange': function(e) {onPlayerStateChange(e, clips)}
+          }
+        });
       } else {
         /* Tell us an error happened */
         console.log('Error: ' + xhr.status)
       }
+
     }
   }
 }
@@ -78,9 +103,12 @@ function onPlayerReady(event, clips) {
         hl[i].classList.remove('highlighted')
       }
       curClip = clip
-      document.querySelector(clip.startid).classList.add('highlighted')
-      event.target.seekTo(clip.begin)
-      event.target.playVideo();
+      console.log(clip.ytId, event.target.getVideoUrl())
+      if (clip.ytId === event.target.getVideoUrl()) {
+        document.querySelector(clip.startid).classList.add('highlighted')
+        event.target.seekTo(clip.begin)
+        event.target.playVideo();
+      }
     }
     document.querySelector(clips[i].startid).addEventListener('click', clickHandler.bind(this, event, clips[i]))
   }

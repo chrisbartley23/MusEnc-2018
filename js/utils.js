@@ -11,7 +11,9 @@ function showScore(id, path) {
     if (xhr.readyState === DONE) {
       if (xhr.status === OK) {
         /* Pass the MEI data to Verovio */
-        var svg = vrvToolkit.renderData(xhr.responseText, {})
+        //var svg = vrvToolkit.renderData(xhr.responseText, {})
+        vrvToolkit.loadData(xhr.responseText)
+        var svg = vrvToolkit.renderPage(1,{})
 
         /* Place Verovio's output on the page */
         document.getElementById(id).innerHTML = svg
