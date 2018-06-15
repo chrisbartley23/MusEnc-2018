@@ -47,7 +47,7 @@
       <clip begin="00:00:01.23" end="00:01:39.55" betype="time" n="clip1" startid="#m-53"></clip>
           <!-- <when absolute="00:00:10.23" xml:id="MAL-Start1"/> -->
           <!-- <when absolute="00:00:12.23" xml:id="MAL-End1"/> -->
-      <clip begin="00:01:39.56" end="00:03:23.00" betype="time" n="clip3" startid="#m-2812"></clip>
+      <clip begin="00:01:39.56" end="00:03:23.00" betype="time" n="clip3" startid="#m-99"></clip> <!-- m-2812 -->
           <!-- <when absolute="00:01:39.56" xml:id="MAL-Start3"/> -->
       </recording>
 
